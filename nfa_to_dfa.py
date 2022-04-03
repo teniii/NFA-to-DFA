@@ -94,40 +94,48 @@ class NFA:
     Functie folosita pentru a returna starile dupa lambda tranzitii asociate unei stari trimise ca parametru
     """
     def get_states_after_lambda_transitions(self, state):
-        closure = dict()
-        closure[self.states_to_index_dict[state]] = 0
-        closure_queue = [self.states_to_index_dict[state]]
+        # dict care stocheaza toate starile in care se poate ajunge cu lamba tranzitii
+        # initial valorile sunt 0, iar odata ce o stare a fost verificata, este marcata cu 1
+        state_verified_dict = dict()
+        state_verified_dict[self.states_to_index_dict[state]] = 0
 
-        # While stack is not empty the loop will run
-        while (len(closure_queue) > 0):
+        # coada cu starile ce mai trebuie verificate
+        queue = [self.states_to_index_dict[state]]
+
+        # Cat timp mai exista stari in coada, iteram
+        while (len(queue) > 0):
         
-            # Get the top of stack that will be evaluated now
-            cur = closure_queue.pop(0)
+            # Extragem prima stare din coada
+            current_state = queue.pop(0)
             
             # For the epsilon transition of that state,
             # if not present in closure array then add to dict and push to stack
             for x in self.delta_table[
-                    str(cur)+','+str(self.alphabet_to_index_dict[LAMBDA])]:
-                if x not in closure.keys():
-                    closure[x] = 0
-                    closure_queue.append(x)
-            closure[cur] = 1
-        return closure.keys()
+            str(current_state)+','+
+            str(self.alphabet_to_index_dict[LAMBDA])]:
+                if x not in state_verified_dict.keys():
+                    state_verified_dict[x] = 0
+                    queue.append(x)
+            state_verified_dict[current_state] = 1
+        return state_verified_dict.keys()
 
 
-    def getStateName(self, state_list):
+    """
+    Functie pentru a seta un nume nodurilor din graf
+    """
+    def get_DFA_state_name(self, states):
 
-        # Get name from set of states to display in the final DFA diagram
-        list_for_join = [self.states[state] for state in state_list]
+        list_for_join = [self.states[state] for state in states]
 
         return "[" + ",".join(list_for_join) + ']'
     
+    """
+    Functie pentru a verifica daca o stare din AFD este finala
+    """
+    def is_final_DFA_state(self, states):
 
-    def isFinalDFA(self, state_list):
-
-        # Method to check if the set of state is final state in DFA
-        # by checking if any of the set is a final state in NFA
-        for x in state_list:
+        # Verificam daca lista de stari include o stare finala din AFN
+        for x in states:
             for y in self.final_states:
                 if (x == self.states_to_index_dict[y]):
                     return True
@@ -151,16 +159,16 @@ dfa_stack = list()
 dfa_stack.append(epsilon_closure[nfa.start_state])
 
 # Check if start state is the final state in DFA
-if (nfa.isFinalDFA(dfa_stack[0])):
+if (nfa.is_final_DFA_state(dfa_stack[0])):
 	dfa_vGraf.attr('node', shape='doublecircle')
 else:
 	dfa_vGraf.attr('node', shape='circle')
-dfa_vGraf.node(nfa.getStateName(dfa_stack[0]))
+dfa_vGraf.node(nfa.get_DFA_state_name(dfa_stack[0]))
 
 # Adding start state arrow to start state in DFA
 dfa_vGraf.attr('node', shape='none')
 dfa_vGraf.node('')
-dfa_vGraf.edge('', nfa.getStateName(dfa_stack[0]))
+dfa_vGraf.edge('', nfa.get_DFA_state_name(dfa_stack[0]))
 
 # List to store the states of DFA
 dfa_states = list()
@@ -194,15 +202,15 @@ while (len(dfa_stack) > 0):
 
 				# Check if this set contains final state of NFA
 				# to get if this set will be final state in DFA
-				if (nfa.isFinalDFA(list(to_state))):
+				if (nfa.is_final_DFA_state(list(to_state))):
 					dfa_vGraf.attr('node', shape='doublecircle')
 				else:
 					dfa_vGraf.attr('node', shape='circle')
-				dfa_vGraf.node(nfa.getStateName(list(to_state)))
+				dfa_vGraf.node(nfa.get_DFA_state_name(list(to_state)))
 
 			# Adding edge between from state and to state
-			dfa_vGraf.edge(nfa.getStateName(cur_state),
-					nfa.getStateName(list(to_state)),
+			dfa_vGraf.edge(nfa.get_DFA_state_name(cur_state),
+					nfa.get_DFA_state_name(list(to_state)),
 					label=nfa.alphabet[al])
 
 # Makes a pdf with name dfa.pdf and views the pdf

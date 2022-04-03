@@ -78,12 +78,12 @@ class NFA:
         for state_index in range(len(self.states)):
             for alphabet_index in range(len(self.alphabet)):
                 # initializarea tuturor cheilor stare+operator
-                self.delta_table[str(state_index)+','+str(alphabet_index)] = []
+                self.delta_table[str(state_index)+str(alphabet_index)] = []
 
         for i in range(len(self.delta)):
             # popularea
             self.delta_table[
-                str(self.states_to_index_dict[self.delta[i][0]])+','+
+                str(self.states_to_index_dict[self.delta[i][0]])+
                 str(self.alphabet_to_index_dict[self.delta[i][1]])
             ].append(
                 self.states_to_index_dict[self.delta[i][2]]
@@ -111,7 +111,7 @@ class NFA:
             # For the epsilon transition of that state,
             # if not present in closure array then add to dict and push to stack
             for x in self.delta_table[
-            str(current_state)+','+
+            str(current_state)+
             str(self.alphabet_to_index_dict[LAMBDA])]:
                 if x not in state_verified_dict.keys():
                     state_verified_dict[x] = 0
@@ -180,13 +180,13 @@ while (len(dfa_stack) > 0):
 	cur_state = dfa_stack.pop(0)
 
 	# Traversing through all the alphabet for evaluating transitions in DFA
-	for al in range((nfa.alphabet_length) - 1):
+	for al in range((len(nfa.alphabet)) - 1):
 		# Set to see if the epsilon closure of the set is empty or not
 		from_closure = set()
 		for x in cur_state:
 			# Performing Union update and adding all the new states in set
 			from_closure.update(
-				set(nfa.delta_table[str(x)+','+str(al)]))
+				set(nfa.delta_table[str(x)+str(al)]))
 
 		# Check if epsilon closure of the new set is not empty
 		if (len(from_closure) > 0):

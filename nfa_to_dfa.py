@@ -72,7 +72,8 @@ class NFA:
         self.alphabet_to_index_dict = dict()
         for operator_index in range(len(self.alphabet)):
             self.alphabet_to_index_dict[self.alphabet[operator_index]] = operator_index
-            
+        
+
         # delta_table este de forma [Index stare initiala + index operator din alfabet]: [Starile noi]
         self.delta_table = dict()
         for state_index in range(len(self.states)):
@@ -91,9 +92,9 @@ class NFA:
 
 
     """
-    Functie folosita pentru a returna starile dupa lambda tranzitii asociate unei stari trimise ca parametru
+    Functie folosita pentru a returna lambda inchiderile (starile dupa lambda tranzitii) asociate unei stari trimise ca parametru
     """
-    def get_states_after_lambda_transitions(self, state):
+    def get_states_after_lambda_transitions(self, state) -> List:
         # dict care stocheaza toate starile in care se poate ajunge cu lamba tranzitii
         # initial valorile sunt 0, iar odata ce o stare a fost verificata, este marcata cu 1
         state_verified_dict = dict()
@@ -117,7 +118,7 @@ class NFA:
                     state_verified_dict[x] = 0
                     queue.append(x)
             state_verified_dict[current_state] = 1
-        return state_verified_dict.keys()
+        return list(state_verified_dict.keys())
 
 
     """
@@ -129,6 +130,7 @@ class NFA:
 
         return "[" + ",".join(list_for_join) + ']'
     
+
     """
     Functie pentru a verifica daca o stare din AFD este finala
     """

@@ -83,7 +83,7 @@ class NFA:
         for i in range(len(self.delta)):
             # popularea
             self.delta_table[
-                str(self.states_to_index_dict[self.delta[i][0]])+ ','
+                str(self.states_to_index_dict[self.delta[i][0]])+','+
                 str(self.alphabet_to_index_dict[self.delta[i][1]])
             ].append(
                 self.states_to_index_dict[self.delta[i][2]]

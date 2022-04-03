@@ -1,0 +1,13 @@
+s p q r t
+s
+r
+a b c
+s lambda p
+s a p
+s a t
+p lambda q
+q b q
+q c q
+q c r
+t lambda q
+t b q

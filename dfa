@@ -1,0 +1,22 @@
+digraph {
+	node [shape=circle]
+	"[s,p,q]"
+	node [shape=none]
+	""
+	"" -> "[s,p,q]"
+	node [shape=doublecircle]
+	"[q,r]"
+	"[s,p,q]" -> "[q,r]" [label=c]
+	node [shape=circle]
+	"[q]"
+	"[s,p,q]" -> "[q]" [label=b]
+	node [shape=circle]
+	"[q,t,p]"
+	"[s,p,q]" -> "[q,t,p]" [label=a]
+	"[q,r]" -> "[q,r]" [label=c]
+	"[q,r]" -> "[q]" [label=b]
+	"[q]" -> "[q,r]" [label=c]
+	"[q]" -> "[q]" [label=b]
+	"[q,t,p]" -> "[q,r]" [label=c]
+	"[q,t,p]" -> "[q]" [label=b]
+}

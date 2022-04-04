@@ -19,7 +19,6 @@ GRAPH_REPR = graphviz.Digraph()
         alphabet - symbols for transitions (type = list)
         
         == utilitare ==
-
         states_to_index_dict (type = dict[str:int])
         alphabet_to_index_dict (type = dict[str:int])
         delta_table (type = dict['initial_state_id'+'operator' : list['new_states']])

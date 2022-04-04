@@ -193,6 +193,7 @@ class NFA:
             current_DFA_state = queue.pop(0)
 
             # Iteram prin alfabet pentru a calcula tranzitiile in AFD
+            # Avem -1 pentru a exclude lambda
             for op_index in range(len(self.alphabet) - 1):
 
                 initial_NFA_trans = set()

@@ -87,13 +87,13 @@ class NFA:
         for state_index in range(len(self.states)):
             for alphabet_index in range(len(self.alphabet)):
                 # Initializarea tuturor cheilor stare+operator
-                self.delta_table[str(state_index)+str(alphabet_index)] = []
+                self.delta_table[(state_index,alphabet_index)] = []
 
         for i in range(len(self.delta)):
             # Popularea
             self.delta_table[
-                str(self.states_to_index_dict[self.delta[i][0]])+
-                str(self.alphabet_to_index_dict[self.delta[i][1]])
+                (self.states_to_index_dict[self.delta[i][0]],
+                self.alphabet_to_index_dict[self.delta[i][1]])
             ].append(
                 self.states_to_index_dict[self.delta[i][2]]
                 )
@@ -119,8 +119,8 @@ class NFA:
             
             # Iteram prin lambda inchiderile starii curente
             for x in self.delta_table[
-            str(current_state)+
-            str(self.alphabet_to_index_dict[LAMBDA])]:
+            (current_state,
+            self.alphabet_to_index_dict[LAMBDA])]:
                 # Daca starea nu este in dictionar, o adaugam ca neverificata si o adaugam in coada
                 if x not in state_verified_dict.keys():
                     state_verified_dict[x] = 0
@@ -200,7 +200,7 @@ class NFA:
                 for NFA_state in current_DFA_state:
                     # Adaugam toate tranzitiile starilor AFN din starea AFD curenta
                     initial_NFA_trans.update(
-                        set(self.delta_table[str(NFA_state)+str(op_index)]))
+                        set(self.delta_table[(NFA_state,op_index)]))
 
                 # Verificam multimea sa nu fie goala
                 if (len(initial_NFA_trans) > 0):

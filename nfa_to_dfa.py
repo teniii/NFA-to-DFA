@@ -118,13 +118,13 @@ class NFA:
             current_state = queue.pop(0)
             
             # Iteram prin lambda inchiderile starii curente
-            for x in self.delta_table[
+            for nfa_state in self.delta_table[
             (current_state,
             self.alphabet_to_index_dict[LAMBDA])]:
                 # Daca starea nu este in dictionar, o adaugam ca neverificata si o adaugam in coada
-                if x not in state_verified_dict.keys():
-                    state_verified_dict[x] = 0
-                    queue.append(x)
+                if nfa_state not in state_verified_dict.keys():
+                    state_verified_dict[nfa_state] = 0
+                    queue.append(nfa_state)
 
             # La finalizarea iteratiei starea curenta se considera ca fiind verificata
             state_verified_dict[current_state] = 1

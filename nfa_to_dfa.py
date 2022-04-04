@@ -196,22 +196,24 @@ class NFA:
             # Avem -1 pentru a exclude lambda
             for op_index in range(len(self.alphabet) - 1):
 
-                initial_NFA_trans = set()
+                # Stari NFA in care se poate ajunge dupa operatia op_index, pentru a se verifica lambda inchiderile
+                NFA_states_after_transitions = set()
+
+                # Adaugam toate starile destinatie AFN din starea AFD curenta, pe rand
                 for NFA_state in current_DFA_state:
-                    # Adaugam toate tranzitiile starilor AFN din starea AFD curenta
-                    initial_NFA_trans.update(
+                    NFA_states_after_transitions.update(
                         set(self.delta_table[(NFA_state,op_index)]))
 
                 # Verificam multimea sa nu fie goala
-                if (len(initial_NFA_trans) > 0):
+                if (len(NFA_states_after_transitions) > 0):
                     # Stari AFN dupa lambda tranzitii <=> Stare AFD
                     NFA_states_after_lambda_trans = set()
-                    for NFA_state in list(initial_NFA_trans):
+                    for NFA_state in list(NFA_states_after_transitions):
                         # Pentru fiecare stare se populeaza multimea starilor dupa lamda tranziti
                         NFA_states_after_lambda_trans.update(set(self.get_states_after_lambda_transitions(self.states[NFA_state])))
 
                     # Verificam daca lista de lambda inchideri (starea AFD) nu este deja in dfa_states
-                    # Se poate adauga un else pentru a face un AFD complet
+                    # [imbunatatire] Se poate adauga un else pentru a face un AFD complet
                     if list(NFA_states_after_lambda_trans) not in dfa_states:
                         # Adaugam in coada noua stare AFD
                         queue.append(list(NFA_states_after_lambda_trans))
